@@ -89,6 +89,9 @@ exit
   113  docker network ls
 ##if you check your custom network you will see there are two container on the custom network
   114  docker network inspect my_app_net
+#verify the same 
+ docker exec -it new_nginx curl my_nginx
+
 
 
 
