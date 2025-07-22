@@ -61,4 +61,20 @@ lxd                 8088                8065                2                   
    86  docker ps
    87  docker ps -a
 
+#####lets create an mysql db 
+   99  docker container run -d -p 3306:3306 --name db -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql
+#this db is being created with environment varaibles 
+  100  docker ps
+###this will show the password of mysql 
+  101  docker logs db
+##copy the password in notepad 
+  102  docker exec -it db bash
+###once you login you can create a database 
+create database employee;
+show database employee;
+########
+exit
+exit
+
+
 
