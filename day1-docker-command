@@ -1,0 +1,11 @@
+#this will show all the command related to docker command line
+47  docker
+  ###this will show the docker server information. 
+   48  docker info
+
+  ##lets create our first container 
+   51  docker container run --publish 80:80 --detach nginx
+     #this will show the running container
+   52  docker ps
+   53  curl localhost
+##then open a new tab in the browser and copy the dns name from the lms portal and paste it this will show the test page
