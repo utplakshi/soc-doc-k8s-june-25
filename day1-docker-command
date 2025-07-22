@@ -70,6 +70,9 @@ lxd                 8088                8065                2                   
 ##copy the password in notepad 
   102  docker exec -it db bash
 ###once you login you can create a database 
+#login inside the db
+mysql -u root -p
+#then press enter
 create database employee;
 show database employee;
 ########
