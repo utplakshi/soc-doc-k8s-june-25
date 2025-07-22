@@ -19,4 +19,46 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 9151cd789e71   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:81->80/tcp, [::]:81->80/tcp   dazzling_newton
 1d4fc81ed806   nginx     "/docker-entrypoint.…"   9 minutes ago   Up 9 minutes   0.0.0.0:80->80/tcp, [::]:80->80/tcp   nervous_leavitt
 [root@ip-172-31-115-189 ~]$
+##container vs process id 
+##lets try to understand the concept behind --detach mode
+[root@ip-172-31-115-189 ~]$ docker container run --publish 81:80 --detach nginx
+###what does it means
+###-- detach is like an daemon or we are running our container as background process. 
+[root@ip-172-31-115-189 ~]$ docker container run --publish 82:80 httpd
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.4. Set the 'ServerName' directive globally to suppress this message
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.4. Set the 'ServerName' directive globally to suppress this message
+[Tue Jul 22 08:41:41.035373 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.64 (Unix) configured -- resuming normal operations
+[Tue Jul 22 08:41:41.035511 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+####the purpose of running detach mode is to run your container as background process . 
+##press ctrl c this will kill the process
+[root@ip-172-31-115-189 ~]$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                                 NAMES
+9151cd789e71   nginx     "/docker-entrypoint.…"   About an hour ago   Up About an hour   0.0.0.0:81->80/tcp, [::]:81->80/tcp   dazzling_newton
+1d4fc81ed806   nginx     "/docker-entrypoint.…"   2 hours ago         Up 2 hours         0.0.0.0:80->80/tcp, [::]:80->80/tcp   nervous_leavitt
+###docker ps -a will show all the running and stopped container
+[root@ip-172-31-115-189 ~]$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS                      PORTS                                 NAMES
+7d4872155293   httpd     "httpd-foreground"       56 seconds ago       Exited (0) 14 seconds ago                                         ecstatic_hoover
+
+#####second way
+[root@ip-172-31-115-189 ~]$ docker run --name mongo -d mongo
+Unable to find image 'mongo:latest' locally
+[root@ip-172-31-115-189 ~]$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                                 NAMES
+b7b39c70d3b7   mongo     "docker-entrypoint.s…"   7 seconds ago       Up 4 seconds       27017/tcp                             mongo
+###top is a command in linux which is used to check all your process id 
+[root@ip-172-31-115-189 ~]$ docker top mongo
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+lxd                 8088                8065                2                   08:45               ?                   00:00:00            mongod --bind_ip_all
+#######once you check the same you will get an process id 
+ 80  docker ps
+   81  docker top mongo
+   #this will show all the running process in your linux system
+   83  ps aux
+   84  docker top mongo
+   85  kill -9 8088
+#this will show the container is in down state
+   86  docker ps
+   87  docker ps -a
+
 
