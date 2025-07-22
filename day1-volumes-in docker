@@ -64,3 +64,111 @@ mysql> show databases;
 '#ib_16384_0.dblwr'  '#innodb_temp'   binlog.000002   ca.pem            employe 
   ###again login and create a new database
   ##do ls check the database is created or not in the folder
+#second exercise we delete the database then also the data persist
+[root@ip-172-31-115-189 ~]$ docker run -d --name db2 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v mysql-db2:/var/lib/mysql mysql:8
+95e125a1b605b67204dc95ce1f2ebc1a48889e3ce58a9fbf64c48cad7117359b
+#check the volume name 
+[root@ip-172-31-115-189 ~]$ docker volume ls
+
+local     mysql-db2
+#lets inspect the volume 
+[root@ip-172-31-115-189 ~]$ docker volume inspect  mysql-db2
+[
+    {
+        "CreatedAt": "2025-07-22T11:19:45Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/mysql-db2/_data",
+        "Name": "mysql-db2",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+##this will give the path of the volume 
+[root@ip-172-31-115-189 ~]$ ls /var/lib/docker/volumes/mysql-db2/_data
+'#ib_16384_0.dblwr'  '#innodb_temp'   binlog.000002   ca.pem            ib_buffer_pool   mysql        mysql_upgrade_history   public_key.pem    sys
+'#ib_16384_1.dblwr'   auto.cnf        binlog.index    client-cert.pem   ibdata1          mysql.ibd    performance_schema      server-cert.pem   undo_001
+'#innodb_redo'        binlog.000001   ca-key.pem      client-key.pem    ibtmp1           mysql.sock   private_key.pem         server-key.pem    undo_002
+#lets login inside the container and create a custom database
+[root@ip-172-31-115-189 ~]$ docker exec -it db2 bash
+bash-5.1# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.4.5 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+mysql> create database springdb;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> exit
+Bye
+bash-5.1# exit
+exit
+##lets check a folder has been created or not. 
+[root@ip-172-31-115-189 ~]$ ls /var/lib/docker/volumes/mysql-db2/_data
+'#ib_16384_0.dblwr'  '#innodb_temp'   binlog.000002   ca.pem            ib_buffer_pool   mysql        mysql_upgrade_history   public_key.pem    springdb   undo_002
+##once created lets delet the db2 container
+[root@ip-172-31-115-189 ~]$ docker stop db2
+db2
+[root@ip-172-31-115-189 ~]$ docker rm db2
+db2
+####once i delete the db2 container the volume is not deleted 
+##[root@ip-172-31-115-189 ~]$ docker volume ls
+DRIVER    VOLUME NAME
+
+local     mysql-db2
+[root@ip-172-31
+###lts create a new container and attach the same volume 
+[root@ip-172-31-115-189 ~]$ docker run -d --name db2 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v mysql-db2:/var/lib/mysql mysql:8.4
+Unable to find image 'mysql:8.4' locally
+8.4: Pulling from library/mysql
+Digest: sha256:679e7e924f38a3cbb62a3d7df32924b83f7321a602d3f9f967c01b3df18495d6
+Status: Downloaded newer image for mysql:8.4
+6af870c6cb1f35edc32aec0c1c40d5b3f4ef4c9cf2f68cdb9616e73c31a2
+#lets login inside the container and verify the springdb is there or not 
+[root@ip-172-31-115-189 ~]$ docker exec -it db2 bash
+bash-5.1# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.4.5 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| springdb           |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+#lets exit the container and verify the contianer configuration that it has mapped to the same storage 
+exit
+exit
+###inspect the container
+[root@ip-172-31-115-189 ~]$ docker container inspect db2
+##check the path it will match 
+ 164  docker container inspect db2
+  ##you can grep it also
+  166  docker container inspect db2 | grep Source
+
