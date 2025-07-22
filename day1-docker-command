@@ -9,3 +9,14 @@
    52  docker ps
    53  curl localhost
 ##then open a new tab in the browser and copy the dns name from the lms portal and paste it this will show the test page
+##if you try to create a new container from the same image it will not download the image again an again. which means it always checkj the local repo 
+ 57  docker container run --publish 81:80 --detach nginx
+#to verify the same you can run the below command
+59  docker images
+##lets check if there are two different running with same images 
+[root@ip-172-31-115-189 ~]$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                 NAMES
+9151cd789e71   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:81->80/tcp, [::]:81->80/tcp   dazzling_newton
+1d4fc81ed806   nginx     "/docker-entrypoint.…"   9 minutes ago   Up 9 minutes   0.0.0.0:80->80/tcp, [::]:80->80/tcp   nervous_leavitt
+[root@ip-172-31-115-189 ~]$
+
