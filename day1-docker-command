@@ -74,7 +74,7 @@ lxd                 8088                8065                2                   
 mysql -u root -p
 #then press enter
 create database employee;
-show database employee;
+show databases;
 ########
 exit
 exit
