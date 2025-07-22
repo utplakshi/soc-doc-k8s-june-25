@@ -1,0 +1,66 @@
+
+125  docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+  126  docker ps
+  ##docker volume show me that the volume is created by with an id which is difficult to understand
+  127  docker volume ls
+  #we want to give a custom name to the volume also we will use an mysql version image
+  [root@ip-172-31-115-189 ~]$ docker run -d --name db1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v mysql-db:/var/lib/mysql mysql:8
+c5bebb0ec1eaacc6e248a0c94e0610fa91ead0a104c5eca427ea6f7b44321971
+[root@ip-172-31-115-189 ~]$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                                    NAMES
+c5bebb0ec1ea   mysql:8   "docker-entrypoint.s…"   3 seconds ago    Up 3 seconds    3306/tcp, 33060/tcp                                      db1
+###once we created the mysql container with a different version  -v mysql-db:/var/lib/mysq #-v will create a persiostent volume mysql-db this is the label of the volume /var/lib/mysql #this is the path where container is storing your data. 
+ #this will give me the custom volume
+  [root@ip-172-31-115-189 ~]$ docker volume ls
+DRIVER    VOLUME NAME
+
+local     mysql-db
+  #if i do inspect command this will show me the path of the volume or the data where it is located in your system
+[root@ip-172-31-115-189 ~]$ docker volume inspect mysql-db
+[
+    {
+        "CreatedAt": "2025-07-22T10:44:41Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/mysql-db/_data",
+        "Name": "mysql-db",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+##lets complete our first step login inside the db and create a custom database 
+  [root@ip-172-31-115-189 ~]$ docker exec -it db1 bash
+bash-5.1# mysql -u root -p
+  ##there is no password so just press enter 
+  mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database employe;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| employe            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+###lets exit mysql and container 
+  [root@ip-172-31-115-189 ~]$ cd /var/lib/docker/volumes/mysql-db/_data
+[root@ip-172-31-115-189 _data]$ ls
+'#ib_16384_0.dblwr'  '#innodb_temp'   binlog.000002   ca.pem            employe 
+  ###again login and create a new database
+  ##do ls check the database is created or not in the folder
