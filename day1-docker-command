@@ -78,6 +78,17 @@ show databases;
 ########
 exit
 exit
+#####docker networking 
+108  docker network ls
+#this will create a custom network 
+  109  docker network create my_app_net
+  110  docker network ls
+#we are creating two different container added to your custom network
+  111  docker run -d --name new_nginx --network my_app_net nginx
+  112  docker run -d --name my_nginx --network my_app_net nginx
+  113  docker network ls
+##if you check your custom network you will see there are two container on the custom network
+  114  docker network inspect my_app_net
 
 
 
