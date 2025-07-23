@@ -1,0 +1,16 @@
+###first you need to be an root user
+  sudo -i
+  ##lets install maven and openjdk
+   175  apt install default-jdk
+  176  apt install maven
+  ##lets clone the maven app
+  177  git clone https://github.com/gopal1409/spring-hello.git
+####
+    178  cd spring-hello/
+  179  mvn clean package
+#####compile the application which will give me an jar file
+   187  cd target/
+  188  ls
+  189  java -jar spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar
+###you can access the app from the browser by pasting your dns name : 8080 /hello replace the dns name to your server
+  http://lab-as-19141.lc.cl-labs.springpeople.com:8080/hello
