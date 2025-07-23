@@ -56,3 +56,34 @@ d092ac62c02b   10 minutes ago   ENTRYPOINT ["java" "-jar" "/app/web.jar"]       
 <missing>      2 years ago      /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
 <missing>      2 years ago      /bin/sh -c #(nop) ADD file:6a3fb962576ab4237…   110MB
 
+##lets put this image in a repo
+##go to hub.docker.com
+##check what is the default repo they have created 
+retag the image 
+###########
+[root@ip-172-31-115-189 spring-hello]$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+
+app          latest    d092ac62c02b   42 minutes ago   488MB
+#check the image id when you are taggin again once you put the image id the gopal1409 replace it with your docker repo name 
+[root@ip-172-31-115-189 spring-hello]$ docker tag d092ac62c02b  gopal1409/app
+###verify the same 
+[root@ip-172-31-115-189 spring-hello]$ docker images
+
+[root@ip-172-31-115-189 spring-hello]$ docker images
+REPOSITORY      TAG       IMAGE ID       CREATED          SIZE
+
+gopal1409/app   latest    d092ac62c02b   43 minutes ago   488MB
+app             latest    d092ac62c02b   43 minutes ago   488M
+#the same image is rename with different name with your repo name
+#lets push the image 
+[root@ip-172-31-115-189 spring-hello]$ docker push gopal1409/app
+Using default tag: latest
+The push refers to repository [docker.io/gopal1409/app]
+dd501d6841d6: Pushed
+367a42b4013a: Pushed
+56285d9a7760: Mounted from library/openjdk
+077bff59ce57: Mounted from library/openjdk
+9cd9df9ffc97: Mounted from library/openjdk
+###once push you can see the image in hub.docker.com
+
