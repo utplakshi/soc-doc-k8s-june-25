@@ -14,3 +14,45 @@
   189  java -jar spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar
 ###you can access the app from the browser by pasting your dns name : 8080 /hello replace the dns name to your server
   http://lab-as-19141.lc.cl-labs.springpeople.com:8080/hello
+cd /root/spring-hello/
+###we need to create a file called as dockerfile
+nano dockerfile
+###inside the dockerfile provide this instruction
+FROM openjdk
+#when i run this will download the openjdk image
+WORKDIR /app
+#this will create the directory inside your image if the directory exist it is going to skip creation of the directory
+COPY /target/*.jar /app/web.jar
+#finally we are going to run the application
+ENTRYPOINT ["java","-jar","/app/web.jar"]
+###to save the file you can press ctrl x press y and enter 
+##lets build the image -t is all about when you build the image it will give you a name of the image 
+#docker build always look for a file called as docker file
+ 202  docker build -t app .
+##lets verify the image is created or not 
+[root@ip-172-31-115-189 spring-hello]$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+
+app          latest    d092ac62c02b   5 minutes ago   488MB
+
+ 210  docker container run -d -p 81:8080 app
+##once you create the image we spin up a container out of it 
+curl localhost:81/hello
+###or you can copy the dns name and paste in browser : 81/hello
+
+#check the image history you will get the layers
+[root@ip-172-31-115-189 spring-hello]$ docker image history app
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+d092ac62c02b   10 minutes ago   ENTRYPOINT ["java" "-jar" "/app/web.jar"]       0B        buildkit.dockerfile.v0
+<missing>      10 minutes ago   COPY /target/*.jar /app/web.jar # buildkit      17.7MB    buildkit.dockerfile.v0
+<missing>      10 minutes ago   WORKDIR /app                                    0B        buildkit.dockerfile.v0
+<missing>      2 years ago      /bin/sh -c #(nop)  CMD ["jshell"]               0B
+<missing>      2 years ago      /bin/sh -c set -eux;   arch="$(objdump="$(co…   324MB
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV JAVA_VERSION=18.0.2.1    0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV LANG=C.UTF-8             0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV PATH=/usr/java/openjd…   0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV JAVA_HOME=/usr/java/o…   0B
+<missing>      2 years ago      /bin/sh -c set -eux;  microdnf install   gzi…   36.7MB
+<missing>      2 years ago      /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
+<missing>      2 years ago      /bin/sh -c #(nop) ADD file:6a3fb962576ab4237…   110MB
+
