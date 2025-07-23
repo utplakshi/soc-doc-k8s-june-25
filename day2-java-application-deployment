@@ -39,3 +39,20 @@ app          latest    d092ac62c02b   5 minutes ago   488MB
 ##once you create the image we spin up a container out of it 
 curl localhost:81/hello
 ###or you can copy the dns name and paste in browser : 81/hello
+
+#check the image history you will get the layers
+[root@ip-172-31-115-189 spring-hello]$ docker image history app
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+d092ac62c02b   10 minutes ago   ENTRYPOINT ["java" "-jar" "/app/web.jar"]       0B        buildkit.dockerfile.v0
+<missing>      10 minutes ago   COPY /target/*.jar /app/web.jar # buildkit      17.7MB    buildkit.dockerfile.v0
+<missing>      10 minutes ago   WORKDIR /app                                    0B        buildkit.dockerfile.v0
+<missing>      2 years ago      /bin/sh -c #(nop)  CMD ["jshell"]               0B
+<missing>      2 years ago      /bin/sh -c set -eux;   arch="$(objdump="$(co…   324MB
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV JAVA_VERSION=18.0.2.1    0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV LANG=C.UTF-8             0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV PATH=/usr/java/openjd…   0B
+<missing>      2 years ago      /bin/sh -c #(nop)  ENV JAVA_HOME=/usr/java/o…   0B
+<missing>      2 years ago      /bin/sh -c set -eux;  microdnf install   gzi…   36.7MB
+<missing>      2 years ago      /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
+<missing>      2 years ago      /bin/sh -c #(nop) ADD file:6a3fb962576ab4237…   110MB
+
