@@ -1,0 +1,30 @@
+##we will use the spring hello program
+   249  cd /root
+  250  cd spring-hello/
+  251  ls
+  252  rm dockerfile
+####remove the previous dockerfile 
+  nano dockerfile
+#stage1: build the application
+FROM maven:3.8.7-openjdk-18-slim AS gopal
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package
+
+#stage2: create the runtime image
+FROM openjdk
+WORKDIR /app
+COPY --from=gopal /app/target/*.jar app.jar
+EXPOSE 8080
+#application.properties tomcat by default run on port 8080
+#server.properties=8081
+ENTRYPOINT ["java","-jar","app.jar"]
+####lets build it 
+  269  docker build -t multi-maven-project .
+###check the image is build or not 
+ 273  docker images
+ #this image history will show that this multi build image has only jar file no other files
+  274  docker image history multi-maven-project
+  ##final steps you need to tag the image with your repo
+  #and upload the same in your repository
