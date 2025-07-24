@@ -1,0 +1,7 @@
+##kubectl get pod this will show all the running master component
+37  kubectl get pod -A
+  #docker command line is not supported anymore in k8s
+   38  docker ps
+  ##we need to use crictl 
+   39  crictl ps
+   40  crictl images
