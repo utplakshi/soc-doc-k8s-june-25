@@ -5,3 +5,16 @@
   ##we need to use crictl 
    39  crictl ps
    40  crictl images
+####lets try to undestand our pod 
+sudo -i
+##########
+#this dry run will generate the pod yaml file
+ 53  kubectl run my-second-pod --image=nginx --port=80 --dry-run=client -o yaml
+   54  kubectl run my-second-pod --image=nginx --port=80 --dry-run=client -o yaml > pod1.yml
+   55  cat pod1.yml
+#this will apply the pod isnide your k8s cluster
+   56  kubectl apply -f pod1.yml
+#get pod will show all the running pod
+   57  kubectl get pod
+###describe will provide you with more details about the pod. 
+   58  kubectl describe pod my-second-pod
