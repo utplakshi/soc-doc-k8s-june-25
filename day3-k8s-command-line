@@ -18,3 +18,10 @@ sudo -i
    57  kubectl get pod
 ###describe will provide you with more details about the pod. 
    58  kubectl describe pod my-second-pod
+##########why we need to communicate with your k8s cluster using master node only 
+61  kubectl get nodes
+#check the master node hostname
+   ###check the kube-api pod which is running on master node
+   63  kubectl get pod -A -o wide
+##in the master machin on this particular folder you will find ca certificate authority to communicate with your k8s cluster
+   64  cat /root/.kube/config
