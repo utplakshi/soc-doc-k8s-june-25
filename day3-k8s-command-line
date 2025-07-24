@@ -1,0 +1,27 @@
+##kubectl get pod this will show all the running master component
+37  kubectl get pod -A
+  #docker command line is not supported anymore in k8s
+   38  docker ps
+  ##we need to use crictl 
+   39  crictl ps
+   40  crictl images
+####lets try to undestand our pod 
+sudo -i
+##########
+#this dry run will generate the pod yaml file
+ 53  kubectl run my-second-pod --image=nginx --port=80 --dry-run=client -o yaml
+   54  kubectl run my-second-pod --image=nginx --port=80 --dry-run=client -o yaml > pod1.yml
+   55  cat pod1.yml
+#this will apply the pod isnide your k8s cluster
+   56  kubectl apply -f pod1.yml
+#get pod will show all the running pod
+   57  kubectl get pod
+###describe will provide you with more details about the pod. 
+   58  kubectl describe pod my-second-pod
+##########why we need to communicate with your k8s cluster using master node only 
+61  kubectl get nodes
+#check the master node hostname
+   ###check the kube-api pod which is running on master node
+   63  kubectl get pod -A -o wide
+##in the master machin on this particular folder you will find ca certificate authority to communicate with your k8s cluster
+   64  cat /root/.kube/config
